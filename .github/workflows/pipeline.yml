@@ -1,0 +1,24 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  test-and-deploy:
+    runs-on: [self-hosted, Windows, X64]
+
+    steps:
+      - name: Get new code
+        uses: actions/checkout@v4
+
+      - name: Test program
+        run: python test.py
+
+      - name: Update server
+        if: success()
+        shell: powershell
+        run: |
+          cd C:\VSC\PB\CI\serv\CI
+          git pull origin main
